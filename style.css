@@ -155,6 +155,112 @@ body {
     font-weight: 600;
 }
 
+/* API 키 입력 폼 */
+.api-key-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    padding: 40px 20px;
+}
+
+.api-key-form {
+    background-color: rgba(42, 42, 42, 0.95);
+    border-radius: 8px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.api-key-form h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.api-key-info {
+    color: #b3b3b3;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.api-key-link {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.api-key-link a {
+    color: #e50914;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.api-key-link a:hover {
+    color: #f40612;
+    text-decoration: underline;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.api-key-input {
+    width: 100%;
+    padding: 15px;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.api-key-input:focus {
+    outline: none;
+    border-color: #e50914;
+    background-color: #404040;
+}
+
+.api-key-input::placeholder {
+    color: #808080;
+}
+
+.api-key-btn {
+    padding: 15px 30px;
+    background-color: #e50914;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.api-key-btn:hover {
+    background-color: #f40612;
+}
+
+.api-key-btn:active {
+    transform: scale(0.98);
+}
+
+.api-key-note {
+    color: #808080;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header {
@@ -190,6 +296,14 @@ body {
     .movie-info {
         padding: 12px;
     }
+
+    .api-key-form {
+        padding: 30px 20px;
+    }
+
+    .api-key-form h3 {
+        font-size: 1.3rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -216,5 +330,23 @@ body {
 
     .section-title {
         font-size: 1.2rem;
+    }
+
+    .api-key-form {
+        padding: 25px 15px;
+    }
+
+    .api-key-form h3 {
+        font-size: 1.2rem;
+    }
+
+    .api-key-input {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+
+    .api-key-btn {
+        font-size: 0.9rem;
+        padding: 12px 20px;
     }
 }

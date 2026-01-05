@@ -22,6 +22,28 @@
     <main class="main">
         <section class="hero">
             <h2 class="section-title">현재 상영 중인 영화</h2>
+            
+            <!-- API 키 입력 폼 -->
+            <div class="api-key-form-container" id="apiKeyFormContainer" style="display: none;">
+                <div class="api-key-form">
+                    <h3>TMDB API 키 입력</h3>
+                    <p class="api-key-info">영화 정보를 불러오려면 TMDB API 키가 필요합니다.</p>
+                    <p class="api-key-link">
+                        <a href="https://www.themoviedb.org/settings/api" target="_blank">API 키 발급받기</a>
+                    </p>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="apiKeyInput" 
+                            placeholder="여기에 API 키를 입력하세요"
+                            class="api-key-input"
+                        >
+                        <button id="saveApiKeyBtn" class="api-key-btn">저장하고 시작하기</button>
+                    </div>
+                    <p class="api-key-note">API 키는 브라우저에 저장되며, 다음 방문 시 자동으로 사용됩니다.</p>
+                </div>
+            </div>
+            
             <div class="movies-container" id="moviesContainer">
                 <div class="loading">영화를 불러오는 중...</div>
             </div>

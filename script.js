@@ -3,16 +3,38 @@
 // ============================================
 // TMDB API 키를 발급받아 아래에 입력하세요.
 // API 키 발급: https://www.themoviedb.org/settings/api
-const API_KEY = 'YOUR_API_KEY_HERE'; // 여기에 API 키를 입력하세요
+// 또는 브라우저에서 직접 입력할 수 있습니다.
+let API_KEY = 'YOUR_API_KEY_HERE'; // 기본값 (localStorage에서 읽어옴)
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const STORAGE_KEY = 'tmdb_api_key';
+
+// localStorage에서 API 키 불러오기
+function loadApiKey() {
+    const savedKey = localStorage.getItem(STORAGE_KEY);
+    if (savedKey && savedKey !== 'YOUR_API_KEY_HERE' && savedKey.trim() !== '') {
+        API_KEY = savedKey;
+        return true;
+    }
+    return false;
+}
+
+// API 키 저장하기
+function saveApiKey(key) {
+    if (key && key.trim() !== '' && key !== 'YOUR_API_KEY_HERE') {
+        localStorage.setItem(STORAGE_KEY, key.trim());
+        API_KEY = key.trim();
+        return true;
+    }
+    return false;
+}
 
 // 현재 상영 중인 영화 가져오기
 async function fetchNowPlayingMovies() {
     // API 키 확인
-    if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
-        throw new Error('API 키가 설정되지 않았습니다. script.js 파일에서 API_KEY를 설정해주세요.');
+    if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE' || API_KEY.trim() === '') {
+        throw new Error('API 키가 설정되지 않았습니다.');
     }
     
     try {
@@ -64,9 +86,59 @@ function createMovieCard(movie) {
     return card;
 }
 
+// API 키 입력 폼 표시
+function showApiKeyForm() {
+    const formContainer = document.getElementById('apiKeyFormContainer');
+    const moviesContainer = document.getElementById('moviesContainer');
+    
+    formContainer.style.display = 'flex';
+    moviesContainer.style.display = 'none';
+    
+    // 저장 버튼 이벤트 리스너
+    const saveBtn = document.getElementById('saveApiKeyBtn');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    
+    // 기존 이벤트 리스너 제거 후 추가
+    const newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    
+    newSaveBtn.addEventListener('click', () => {
+        const key = apiKeyInput.value.trim();
+        if (key && key !== 'YOUR_API_KEY_HERE') {
+            if (saveApiKey(key)) {
+                formContainer.style.display = 'none';
+                moviesContainer.style.display = 'grid';
+                renderMovies();
+            } else {
+                alert('올바른 API 키를 입력해주세요.');
+            }
+        } else {
+            alert('API 키를 입력해주세요.');
+        }
+    });
+    
+    // Enter 키로도 저장 가능
+    apiKeyInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            newSaveBtn.click();
+        }
+    });
+}
+
 // 영화 목록 렌더링
 async function renderMovies() {
     const container = document.getElementById('moviesContainer');
+    const formContainer = document.getElementById('apiKeyFormContainer');
+    
+    // API 키 확인
+    if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE' || API_KEY.trim() === '') {
+        showApiKeyForm();
+        return;
+    }
+    
+    // 폼 숨기고 컨테이너 표시
+    formContainer.style.display = 'none';
+    container.style.display = 'grid';
     
     try {
         container.innerHTML = '<div class="loading">영화를 불러오는 중...</div>';
@@ -87,9 +159,21 @@ async function renderMovies() {
         
     } catch (error) {
         console.error('렌더링 오류:', error);
-        container.innerHTML = `<div class="error">오류가 발생했습니다: ${error.message}<br><small>브라우저 콘솔(F12)에서 자세한 오류를 확인하세요.</small></div>`;
+        
+        // API 키 관련 오류면 폼 표시
+        if (error.message.includes('API 키가 설정되지 않았습니다')) {
+            showApiKeyForm();
+        } else {
+            container.innerHTML = `<div class="error">오류가 발생했습니다: ${error.message}<br><small>브라우저 콘솔(F12)에서 자세한 오류를 확인하세요.</small></div>`;
+        }
     }
 }
 
-// 페이지 로드 시 영화 목록 불러오기
-document.addEventListener('DOMContentLoaded', renderMovies);
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    // localStorage에서 API 키 불러오기
+    loadApiKey();
+    
+    // 영화 목록 렌더링 시도
+    renderMovies();
+});
